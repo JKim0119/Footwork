@@ -1,15 +1,24 @@
 package com.example.footwork;
 
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.arch.core.executor.TaskExecutor;
+
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    LinearLayout timerLinearLayout, weightLinearLayout;
+    BottomSheetDialog bottomSheetDialog;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +27,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        textView = findViewById(R.id.textView);
+        createBottomSheetDialog();
+
+    }
+
+    private void createBottomSheetDialog() {
+        if (bottomSheetDialog == null) {
+            View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet, null);
+            timerLinearLayout = view.findViewById(R.id.timerLinearLayout);
+            weightLinearLayout = view.findViewById(R.id.weightLinearLayout);
+
+            timerLinearLayout.setOnClickListener(this);
+            weightLinearLayout.setOnClickListener(this);
+
+            bottomSheetDialog = new BottomSheetDialog(this);
+            bottomSheetDialog.setContentView(view);
+        }
     }
 
     @Override
@@ -48,5 +66,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showBottomSheet(View view) {
+        bottomSheetDialog.show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.timerLinearLayout:
+                textView.setText("Timer");
+                bottomSheetDialog.dismiss();
+                break;
+            case R.id.weightLinearLayout:
+                textView.setText("Weights");
+                bottomSheetDialog.dismiss();
+                break;
+        }
     }
 }
