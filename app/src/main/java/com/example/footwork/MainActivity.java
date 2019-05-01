@@ -1,7 +1,7 @@
 package com.example.footwork;
 
 import android.os.Bundle;
-
+import android.util.Log;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,12 +13,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     LinearLayout timerLinearLayout, weightLinearLayout;
     BottomSheetDialog bottomSheetDialog;
+    ToggleButton firstButton, secondButton, thirdButton;
     TextView textView;
+    int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         textView = findViewById(R.id.textView);
         createBottomSheetDialog();
+
+        firstButton = findViewById(R.id.toggle_button_1);
+        secondButton = findViewById(R.id.toggle_button_2);
+        thirdButton = findViewById(R.id.toggle_button_3);
 
     }
 
@@ -83,6 +90,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 textView.setText("Weights");
                 bottomSheetDialog.dismiss();
                 break;
+        }
+    }
+
+    public void changeFirstButton(View view) {
+        boolean checked = ((ToggleButton)view).isChecked();
+        Log.i("myTag","Counter: " + counter);
+        Log.i("myOtherTag","Checked value: " + checked);
+        if(checked) {
+            counter++;
+            textView.setText(String.valueOf(counter));
+            firstButton.setText(String.valueOf(counter));
+        }
+        else {
+            counter--;
+            textView.setText(String.valueOf(counter));
+            firstButton.setText("");
+        }
+    }
+
+    public void changeSecondButton(View view) {
+        boolean checked = ((ToggleButton)view).isChecked();
+        Log.i("myTag","Counter: " + counter);
+        Log.i("myOtherTag","Checked value: " + checked);
+        if(checked) {
+            counter++;
+            textView.setText(String.valueOf(counter));
+            secondButton.setText(String.valueOf(counter));
+        }
+        else {
+            counter--;
+            textView.setText(String.valueOf(counter));
+            secondButton.setText("");
+        }
+    }
+
+    public void changeThirdButton(View view) {
+        boolean checked = ((ToggleButton)view).isChecked();
+        Log.i("myTag","Counter: " + counter);
+        Log.i("myOtherTag","Checked value: " + checked);
+        if(checked) {
+            counter++;
+            textView.setText(String.valueOf(counter));
+            thirdButton.setText(String.valueOf(counter));
+        }
+        else {
+            counter--;
+            textView.setText(String.valueOf(counter));
+            thirdButton.setText("");
         }
     }
 }
