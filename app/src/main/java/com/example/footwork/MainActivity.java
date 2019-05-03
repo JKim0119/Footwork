@@ -3,6 +3,8 @@ package com.example.footwork;
 import android.os.Bundle;
 import android.util.Log;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.arch.core.executor.TaskExecutor;
@@ -19,7 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     LinearLayout timerLinearLayout, weightLinearLayout;
     BottomSheetDialog bottomSheetDialog;
-    ToggleButton firstButton, secondButton, thirdButton;
+    ToggleButton firstButton, secondButton, thirdButton, fourthButton;
+    FloatingActionButton floatButton;
     TextView textView;
     int counter = 0;
 
@@ -33,9 +36,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textView = findViewById(R.id.textView);
         createBottomSheetDialog();
 
+        floatButton = findViewById(R.id.fab);
+        floatButton.setOnClickListener(this);
+
         firstButton = findViewById(R.id.toggle_button_1);
         secondButton = findViewById(R.id.toggle_button_2);
         thirdButton = findViewById(R.id.toggle_button_3);
+        fourthButton = findViewById(R.id.toggle_button_4);
+
+        firstButton.setOnClickListener(this);
+        secondButton.setOnClickListener(this);
+        thirdButton.setOnClickListener(this);
+        fourthButton.setOnClickListener(this);
 
     }
 
@@ -75,13 +87,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    public void showBottomSheet(View view) {
-        bottomSheetDialog.show();
-    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.fab:
+                bottomSheetDialog.show();
+                break;
             case R.id.timerLinearLayout:
                 textView.setText("Timer");
                 bottomSheetDialog.dismiss();
@@ -90,54 +102,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 textView.setText("Weights");
                 bottomSheetDialog.dismiss();
                 break;
+            case R.id.toggle_button_1:
+                buttonToggle(view);
+                break;
+            case R.id.toggle_button_2:
+                buttonToggle(view);
+                break;
+            case R.id.toggle_button_3:
+                buttonToggle(view);
+                break;
+            case R.id.toggle_button_4:
+                buttonToggle(view);
+                break;
         }
     }
 
-    public void changeFirstButton(View view) {
-        boolean checked = ((ToggleButton)view).isChecked();
-        Log.i("myTag","Counter: " + counter);
-        Log.i("myOtherTag","Checked value: " + checked);
-        if(checked) {
+    private void buttonToggle(View view) {
+        if(((ToggleButton)view).isChecked()) {
+            floatButton.show();
             counter++;
-            textView.setText(String.valueOf(counter));
-            firstButton.setText(String.valueOf(counter));
+            ((ToggleButton)view).setTextOn(String.valueOf(counter));
+            ((ToggleButton)view).setText(String.valueOf(counter));
         }
         else {
             counter--;
-            textView.setText(String.valueOf(counter));
-            firstButton.setText("");
+            int goneValue = Integer.parseInt(((ToggleButton)view).getTextOn().toString());
+
+            recheck(view, firstButton, goneValue);
+            recheck(view, secondButton, goneValue);
+            recheck(view, thirdButton, goneValue);
+            recheck(view, fourthButton, goneValue);
+
         }
+
+//        Log.i("myTag","Counter: " + counter);
     }
 
-    public void changeSecondButton(View view) {
-        boolean checked = ((ToggleButton)view).isChecked();
-        Log.i("myTag","Counter: " + counter);
-        Log.i("myOtherTag","Checked value: " + checked);
-        if(checked) {
-            counter++;
-            textView.setText(String.valueOf(counter));
-            secondButton.setText(String.valueOf(counter));
-        }
-        else {
-            counter--;
-            textView.setText(String.valueOf(counter));
-            secondButton.setText("");
-        }
+    private void recheck(View view, ToggleButton button, int val) {
+            if(view.getId() != button.getId() && button.isChecked()) {
+                int tempInt = Integer.parseInt(button.getTextOn().toString());
+                if(tempInt > val) {
+                    tempInt--;
+                    button.setTextOn(String.valueOf(tempInt));
+                    button.setText(String.valueOf(tempInt));
+                }
+            }
     }
 
-    public void changeThirdButton(View view) {
-        boolean checked = ((ToggleButton)view).isChecked();
-        Log.i("myTag","Counter: " + counter);
-        Log.i("myOtherTag","Checked value: " + checked);
-        if(checked) {
-            counter++;
-            textView.setText(String.valueOf(counter));
-            thirdButton.setText(String.valueOf(counter));
-        }
-        else {
-            counter--;
-            textView.setText(String.valueOf(counter));
-            thirdButton.setText("");
-        }
-    }
+
 }
