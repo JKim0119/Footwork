@@ -21,10 +21,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     LinearLayout timerLinearLayout, weightLinearLayout;
     BottomSheetDialog bottomSheetDialog;
-    ToggleButton firstButton, secondButton, thirdButton, fourthButton;
+    ToggleButton aButton, bButton, cButton, dButton;
     FloatingActionButton floatButton;
     TextView textView;
     int counter = 0;
+    int[] intPositions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,21 +34,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        intPositions = new int[4];
+
         textView = findViewById(R.id.textView);
         createBottomSheetDialog();
 
         floatButton = findViewById(R.id.fab);
         floatButton.setOnClickListener(this);
 
-        firstButton = findViewById(R.id.toggle_button_1);
-        secondButton = findViewById(R.id.toggle_button_2);
-        thirdButton = findViewById(R.id.toggle_button_3);
-        fourthButton = findViewById(R.id.toggle_button_4);
+        aButton = findViewById(R.id.toggle_button_A);
+        bButton = findViewById(R.id.toggle_button_B);
+        cButton = findViewById(R.id.toggle_button_C);
+        dButton = findViewById(R.id.toggle_button_D);
 
-        firstButton.setOnClickListener(this);
-        secondButton.setOnClickListener(this);
-        thirdButton.setOnClickListener(this);
-        fourthButton.setOnClickListener(this);
+        aButton.setOnClickListener(this);
+        bButton.setOnClickListener(this);
+        cButton.setOnClickListener(this);
+        dButton.setOnClickListener(this);
 
     }
 
@@ -99,22 +102,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bottomSheetDialog.dismiss();
                 break;
             case R.id.weightLinearLayout:
-                textView.setText("Weights");
+                openDialog();
                 bottomSheetDialog.dismiss();
                 break;
-            case R.id.toggle_button_1:
+            case R.id.toggle_button_A:
                 buttonToggle(view);
                 break;
-            case R.id.toggle_button_2:
+            case R.id.toggle_button_B:
                 buttonToggle(view);
                 break;
-            case R.id.toggle_button_3:
+            case R.id.toggle_button_C:
                 buttonToggle(view);
                 break;
-            case R.id.toggle_button_4:
+            case R.id.toggle_button_D:
                 buttonToggle(view);
                 break;
         }
+    }
+
+    private void openDialog() {
+        WeightDialog weightDialog = new WeightDialog();
+        if(aButton.isChecked()) {
+            intPositions[0] = Integer.parseInt(aButton.getText().toString());
+        }
+        if(bButton.isChecked()) {
+            intPositions[1] = Integer.parseInt(bButton.getText().toString());
+        }
+        if(cButton.isChecked()) {
+            intPositions[2] = Integer.parseInt(cButton.getText().toString());
+        }
+        if(dButton.isChecked()) {
+            intPositions[3] = Integer.parseInt(dButton.getText().toString());
+        }
+        weightDialog.newInstance(intPositions);
+        weightDialog.show(getSupportFragmentManager(), "weight dialog");
     }
 
     private void buttonToggle(View view) {
@@ -128,10 +149,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             counter--;
             int goneValue = Integer.parseInt(((ToggleButton)view).getTextOn().toString());
 
-            recheck(view, firstButton, goneValue);
-            recheck(view, secondButton, goneValue);
-            recheck(view, thirdButton, goneValue);
-            recheck(view, fourthButton, goneValue);
+            recheck(view, aButton, goneValue);
+            recheck(view, bButton, goneValue);
+            recheck(view, cButton, goneValue);
+            recheck(view, dButton, goneValue);
 
         }
 
