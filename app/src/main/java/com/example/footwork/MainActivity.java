@@ -7,7 +7,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.arch.core.executor.TaskExecutor;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, WeightDialog.WeightDialogListener {
 
-    LinearLayout timerLinearLayout, weightLinearLayout;
+    LinearLayout spLinearLayout, weightLinearLayout;
     BottomSheetDialog bottomSheetDialog;
     ToggleButton aButton, bButton, cButton, dButton;
     FloatingActionButton floatButton;
     TextView textView;
-    int counter = 0;
-    int[] intPositions;
+    int counter = 4;
+    int[] intPositions, intPosVal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +33,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        intPositions = new int[4];
 
         textView = findViewById(R.id.textView);
         createBottomSheetDialog();
 
         floatButton = findViewById(R.id.fab);
+        floatButton.show();
         floatButton.setOnClickListener(this);
 
         aButton = findViewById(R.id.toggle_button_A);
@@ -52,15 +51,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cButton.setOnClickListener(this);
         dButton.setOnClickListener(this);
 
+        intPositions = new int[4];
+        intPosVal = new int[]{25, 25, 25, 25};
+        intPositions[0] = Integer.parseInt(0 + aButton.getText().toString());
+        intPositions[1] = Integer.parseInt(0 + bButton.getText().toString());
+        intPositions[2] = Integer.parseInt(0 + cButton.getText().toString());
+        intPositions[3] = Integer.parseInt(0 + dButton.getText().toString());
+
     }
 
     private void createBottomSheetDialog() {
         if (bottomSheetDialog == null) {
             View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet, null);
-            timerLinearLayout = view.findViewById(R.id.timerLinearLayout);
+            spLinearLayout = view.findViewById(R.id.spLinearLayout);
             weightLinearLayout = view.findViewById(R.id.weightLinearLayout);
 
-            timerLinearLayout.setOnClickListener(this);
+            spLinearLayout.setOnClickListener(this);
             weightLinearLayout.setOnClickListener(this);
 
             bottomSheetDialog = new BottomSheetDialog(this);
@@ -97,12 +103,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.fab:
                 bottomSheetDialog.show();
                 break;
-            case R.id.timerLinearLayout:
-                textView.setText("Timer");
+            case R.id.spLinearLayout:
+                openDialogShotsPoints();
                 bottomSheetDialog.dismiss();
                 break;
             case R.id.weightLinearLayout:
-                openDialog();
+                openDialogWeight();
                 bottomSheetDialog.dismiss();
                 break;
             case R.id.toggle_button_A:
@@ -120,55 +126,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void openDialog() {
+    private void openDialogShotsPoints() {
+        ShotsPointsDialog shotsPointsDialog = new ShotsPointsDialog();
+        shotsPointsDialog.show(getSupportFragmentManager(), "shots points dialog");
+    }
+
+    private void openDialogWeight() {
         WeightDialog weightDialog = new WeightDialog();
-        if(aButton.isChecked()) {
-            intPositions[0] = Integer.parseInt(aButton.getText().toString());
-        }
-        if(bButton.isChecked()) {
-            intPositions[1] = Integer.parseInt(bButton.getText().toString());
-        }
-        if(cButton.isChecked()) {
-            intPositions[2] = Integer.parseInt(cButton.getText().toString());
-        }
-        if(dButton.isChecked()) {
-            intPositions[3] = Integer.parseInt(dButton.getText().toString());
-        }
-        weightDialog.newInstance(intPositions);
+        weightDialog.newInstance(intPositions, intPosVal);
         weightDialog.show(getSupportFragmentManager(), "weight dialog");
     }
 
     private void buttonToggle(View view) {
         if(((ToggleButton)view).isChecked()) {
-            floatButton.show();
             counter++;
-            ((ToggleButton)view).setTextOn(String.valueOf(counter));
-            ((ToggleButton)view).setText(String.valueOf(counter));
+//            ((ToggleButton)view).setTextOn(String.valueOf(counter));
+//            ((ToggleButton)view).setText(String.valueOf(counter));
         }
         else {
             counter--;
-            int goneValue = Integer.parseInt(((ToggleButton)view).getTextOn().toString());
+//            int goneValue = Integer.parseInt(((ToggleButton)view).getTextOn().toString());
 
-            recheck(view, aButton, goneValue);
-            recheck(view, bButton, goneValue);
-            recheck(view, cButton, goneValue);
-            recheck(view, dButton, goneValue);
-
+//            recheck(view, aButton, goneValue);
+//            recheck(view, bButton, goneValue);
+//            recheck(view, cButton, goneValue);
+//            recheck(view, dButton, goneValue);
+        }
+        intPositions[0] = Integer.parseInt(0 + aButton.getText().toString());
+        intPositions[1] = Integer.parseInt(0 + bButton.getText().toString());
+        intPositions[2] = Integer.parseInt(0 + cButton.getText().toString());
+        intPositions[3] = Integer.parseInt(0 + dButton.getText().toString());
+        for(int x = 0; x < intPositions.length; x++) {
+            if(counter == 2 && intPositions[x] != 0) {
+                intPosVal[x] = 50;
+            }
+            else if(counter == 3 && intPositions[x] != 0) {
+                intPosVal[x] = 33;
+            }
+            else if(counter == 4 && intPositions[x] != 0) {
+                intPosVal[x] = 25;
+            }
         }
 
+        if(counter >= 2) {
+            floatButton.show();
+        }
+        else {
+            floatButton.hide();
+        }
 //        Log.i("myTag","Counter: " + counter);
     }
 
-    private void recheck(View view, ToggleButton button, int val) {
-            if(view.getId() != button.getId() && button.isChecked()) {
-                int tempInt = Integer.parseInt(button.getTextOn().toString());
-                if(tempInt > val) {
-                    tempInt--;
-                    button.setTextOn(String.valueOf(tempInt));
-                    button.setText(String.valueOf(tempInt));
-                }
-            }
+    @Override
+    public void applyWeights(int[] newPosVal) {
+        intPosVal = newPosVal;
     }
+
+//    private void recheck(View view, ToggleButton button, int val) {
+//            if(view.getId() != button.getId() && button.isChecked()) {
+//                int tempInt = Integer.parseInt(button.getTextOn().toString());
+//                if(tempInt > val) {
+//                    tempInt--;
+//                    button.setTextOn(String.valueOf(tempInt));
+//                    button.setText(String.valueOf(tempInt));
+//                }
+//            }
+//    }
 
 
 }
