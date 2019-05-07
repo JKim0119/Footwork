@@ -29,10 +29,7 @@ public class WeightDialog extends DialogFragment implements NumberPicker.OnValue
         // Use the Builder class for convenient dialog construction
         builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-
         View view = inflater.inflate(R.layout.weight_dialog, null);
-
-        textPercentage = view.findViewById(R.id.percentage);
 
         final NumberPicker numberPickerA = view.findViewById(R.id.numberPickerA);
         numberPickerA.setMinValue(0);
@@ -58,36 +55,13 @@ public class WeightDialog extends DialogFragment implements NumberPicker.OnValue
         numberPickerD.setWrapSelectorWheel(false);
         numberPickerD.setOnValueChangedListener(this);
 
-        if(intP[0] == 0) {
-            numberPickerA.setEnabled(false);
-        }
-        else {
-            numberPickerA.setValue(intPV[0]);
-            count += intPV[0];
-        }
-        if(intP[1] == 0) {
-            numberPickerB.setEnabled(false);
-        }
-        else {
-            numberPickerB.setValue(intPV[1]);
-            count += intPV[1];
-        }
-        if(intP[2] == 0) {
-            numberPickerC.setEnabled(false);
-        }
-        else {
-            numberPickerC.setValue(intPV[2]);
-            count += intPV[2];
-        }
-        if(intP[3] == 0) {
-            numberPickerD.setEnabled(false);
-        }
-        else {
-            numberPickerD.setValue(intPV[3]);
-            count += intPV[3];
-        }
-        textPercentage.setText("Total Percentage: " + count);
+        numberPickerEnable(numberPickerA, 0);
+        numberPickerEnable(numberPickerB, 1);
+        numberPickerEnable(numberPickerC, 2);
+        numberPickerEnable(numberPickerD, 3);
 
+        textPercentage = view.findViewById(R.id.percentage);
+        textPercentage.setText("Total Percentage: " + count);
 
         builder.setView(view)
                 .setTitle("Weights of each position")
@@ -110,8 +84,8 @@ public class WeightDialog extends DialogFragment implements NumberPicker.OnValue
                 });
 
         dialog = builder.create();
-        Toast.makeText(getActivity(),"Total percentage must be 100",Toast.LENGTH_LONG).show();
 
+        Toast.makeText(getActivity(),"Total percentage must be 100",Toast.LENGTH_LONG).show();
         // Create the AlertDialog object and return it
         return dialog;
     }
@@ -129,6 +103,30 @@ public class WeightDialog extends DialogFragment implements NumberPicker.OnValue
         positiveButtonChecker();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        positiveButtonChecker();
+    }
+
+    public void positiveButtonChecker() {
+        if(count != 100) {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        }
+        else {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+        }
+    }
+
+    private void numberPickerEnable(NumberPicker np, int i) {
+        if(intP[i] == 0) {
+            np.setEnabled(false);
+        }
+        else {
+            np.setValue(intPV[i]);
+            count += intPV[i];
+        }
+    }
 
     public void newInstance(int[] intPositions, int[] intPosVal) {
         intP = intPositions;
@@ -146,22 +144,8 @@ public class WeightDialog extends DialogFragment implements NumberPicker.OnValue
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        positiveButtonChecker();
-    }
-
     public interface WeightDialogListener {
         void applyWeights(int[] newPosVal);
     }
 
-    public void positiveButtonChecker() {
-        if(count != 100) {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        }
-        else {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-        }
-    }
 }
