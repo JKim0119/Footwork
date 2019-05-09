@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout spLinearLayout, weightLinearLayout;
     BottomSheetDialog bottomSheetDialog;
     ToggleButton aButton, bButton, cButton, dButton;
+    ImageButton playPauseButton;
     FloatingActionButton floatButton;
     TextView shotsText, pointsText, timeShotsText, timePointsText;
     int positionCounter = 4;
@@ -39,10 +41,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         timeShotsText = findViewById(R.id.timeShotsTextMain);
         timePointsText = findViewById(R.id.timePointsTextMain);
 
+        playPauseButton = findViewById(R.id.playpause);
+        playPauseButton.setOnClickListener(this);
+
         createBottomSheetDialog();
 
         floatButton = findViewById(R.id.fab);
-        floatButton.show();
         floatButton.setOnClickListener(this);
 
         aButton = findViewById(R.id.toggle_button_A);
@@ -127,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.toggle_button_D:
                 buttonToggle(view);
                 break;
+            case R.id.playpause:
+                playPauseButton.setImageResource(R.drawable.ic_pause_white_24dp);
+                break;
         }
     }
 
@@ -171,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void openDialogShotsPoints() {
         ShotsPointsDialog shotsPointsDialog = new ShotsPointsDialog();
+        shotsPointsDialog.newShotsPoints(intShotsPoints);
         shotsPointsDialog.show(getSupportFragmentManager(), "shots points dialog");
     }
 
@@ -198,5 +206,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pointsText.setText(points);
         timeShotsText.setText(timeShots);
         timePointsText.setText(timePoints);
+
+        playPauseButton.setVisibility(View.VISIBLE);
+
     }
 }

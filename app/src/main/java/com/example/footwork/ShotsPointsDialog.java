@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
@@ -16,6 +17,7 @@ public class ShotsPointsDialog extends DialogFragment implements SeekBar.OnSeekB
     AlertDialog.Builder builder;
     TextView shotsText, pointsText, timeShotsText, timePointsText;
     ShotsPointsDialogListener listener;
+    int[] shotspoints;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -23,28 +25,29 @@ public class ShotsPointsDialog extends DialogFragment implements SeekBar.OnSeekB
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.shotspoints_dialog, null);
 
+
         final SeekBar shotsSeekBar = view.findViewById(R.id.shotsSeekBar);
         shotsSeekBar.setOnSeekBarChangeListener(this);
-
         final SeekBar pointsSeekBar = view.findViewById(R.id.pointsSeekBar);
         pointsSeekBar.setOnSeekBarChangeListener(this);
-
         final SeekBar timeShotsSeekBar = view.findViewById(R.id.timeShotsSeekBar);
         timeShotsSeekBar.setOnSeekBarChangeListener(this);
-
         final SeekBar timePointsSeekBar = view.findViewById(R.id.timePointsSeekBar);
         timePointsSeekBar.setOnSeekBarChangeListener(this);
 
         shotsText = view.findViewById(R.id.shotsText);
-        shotsText.setText(String.valueOf(shotsSeekBar.getProgress()));
-
         pointsText = view.findViewById(R.id.pointsText);
-        pointsText.setText(String.valueOf(pointsSeekBar.getProgress()));
-
         timeShotsText = view.findViewById(R.id.timeShotsText);
-        timeShotsText.setText(String.valueOf((float) (timeShotsSeekBar.getProgress() / 10.0)));
-
         timePointsText = view.findViewById(R.id.timePointsText);
+
+        shotsSeekBar.setProgress(shotspoints[0]);
+        pointsSeekBar.setProgress(shotspoints[1]);
+        timeShotsSeekBar.setProgress(shotspoints[2]);
+        timePointsSeekBar.setProgress(shotspoints[3]);
+
+        shotsText.setText(String.valueOf(shotsSeekBar.getProgress()));
+        pointsText.setText(String.valueOf(pointsSeekBar.getProgress()));
+        timeShotsText.setText(String.valueOf((float) (timeShotsSeekBar.getProgress() / 10.0)));
         timePointsText.setText(String.valueOf(timePointsSeekBar.getProgress()));
 
         builder.setView(view)
@@ -113,5 +116,9 @@ public class ShotsPointsDialog extends DialogFragment implements SeekBar.OnSeekB
 
     public interface ShotsPointsDialogListener {
         void applyShotsPoints(int[] newShotsPoints);
+    }
+
+    public void newShotsPoints(int[] newShotsPoints) {
+        shotspoints = newShotsPoints;
     }
 }
