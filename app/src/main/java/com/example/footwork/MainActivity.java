@@ -8,6 +8,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -25,9 +27,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ToggleButton aButton, bButton, cButton, dButton;
     ImageButton playPauseButton;
     FloatingActionButton floatButton;
-    TextView shotsText, pointsText, timeShotsText, timePointsText;
+    TextView shotsText, pointsText, timeShotsText, timePointsText, timerText, timerText2;
     int positionCounter = 4;
+    int pointsCounter;
     int[] intPositions, intPosVal, intShotsPoints;
+    CountDownTimer mCountDownTimer, mCountDownTimer2;
+    boolean mTimerRunning;
+    long timeLeft, timeLeft2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        timerText = findViewById(R.id.timer);
+        timerText2 = findViewById(R.id.timer2);
         shotsText = findViewById(R.id.shotsTextMain);
         pointsText = findViewById(R.id.pointsTextMain);
         timeShotsText = findViewById(R.id.timeShotsTextMain);
@@ -132,9 +140,75 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 buttonToggle(view);
                 break;
             case R.id.playpause:
-                playPauseButton.setImageResource(R.drawable.ic_pause_white_24dp);
+                if (mTimerRunning) {
+                    pauseTimer();
+                }
+                else {
+                    startTimer();
+                }
                 break;
         }
+    }
+
+    private void pauseTimer() {
+        mTimerRunning = false;
+        mCountDownTimer.cancel();
+        if(pointsCounter < intShotsPoints[1]) {
+            mCountDownTimer2.cancel();
+        }
+        playPauseButton.setImageResource(R.drawable.ic_play_arrow_white_24dp);
+        floatButton.show();
+        aButton.setEnabled(true);
+        bButton.setEnabled(true);
+        cButton.setEnabled(true);
+        dButton.setEnabled(true);
+    }
+
+    private void startTimer() {
+        pointsCounter = intShotsPoints[1];
+        mCountDownTimer = new CountDownTimer(timeLeft, (long)(intShotsPoints[2]*100)) {
+            @Override
+            public void onTick(long timeUntilFinish) {
+                timeLeft = timeUntilFinish;
+                timerText.setText(String.valueOf(timeLeft));
+            }
+
+            @Override
+            public void onFinish() {
+                pointsCounter--;
+                startTimer2();
+            }
+        }.start();
+        mTimerRunning = true;
+        playPauseButton.setImageResource(R.drawable.ic_pause_white_24dp);
+        floatButton.hide();
+        aButton.setEnabled(false);
+        bButton.setEnabled(false);
+        cButton.setEnabled(false);
+        dButton.setEnabled(false);
+    }
+
+    private void startTimer2() {
+        if(pointsCounter == 0) {
+            mTimerRunning = false;
+            playPauseButton.setImageResource(R.drawable.ic_play_arrow_white_24dp);
+        }
+        else {
+            timeLeft2 = (long)(intShotsPoints[3]*1000);
+            mCountDownTimer2 = new CountDownTimer(timeLeft2, 1000) {
+                @Override
+                public void onTick(long timeUntilFinish) {
+                    timeLeft2 = timeUntilFinish;
+                    timerText2.setText(String.valueOf(timeLeft2));
+                }
+
+                @Override
+                public void onFinish() {
+                    startTimer();
+                }
+            }.start();
+        }
+
     }
 
     private void buttonToggle(View view) {
@@ -207,6 +281,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         timeShotsText.setText(timeShots);
         timePointsText.setText(timePoints);
 
+        timeLeft = (long)(intShotsPoints[0]*intShotsPoints[2]*100);
+        timerText.setText(String.valueOf(intShotsPoints[0]*intShotsPoints[2]*100));
+        timerText2.setText(String.valueOf(intShotsPoints[3]*1000));
         playPauseButton.setVisibility(View.VISIBLE);
 
     }
