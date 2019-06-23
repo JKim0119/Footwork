@@ -52,7 +52,7 @@ public class ShotsPointsDialog extends DialogFragment implements SeekBar.OnSeekB
         timePointsText.setText(String.valueOf(timePointsSeekBar.getProgress()));
 
         builder.setView(view)
-                .setTitle("Weights of each position")
+                .setTitle("Shots/Points")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

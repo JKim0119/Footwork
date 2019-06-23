@@ -183,11 +183,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (id == R.id.action_about) {
             new AlertDialog.Builder(this)
                     .setTitle("About me")
-                    .setMessage("My name is Jacob Kim and I created this app mainly to help my endurance" +
-                            " and work on footwork for tennis. I also made it for others to use in case" +
+                    .setMessage("My name is Jacob and I created this app mainly to help my endurance" +
+                            " and footwork for tennis. I also made it for others to use in case" +
                             " they were looking to do the same!" +
                             "\n\nIf you would like to report a bug/crash or" +
-                            " would like to get in contact with me, you can reach me at \njacob.yeonwoo@gmail.com" +
+                            " would like to get in contact with me, you can reach me at \njacobkim0119@gmail.com" +
                             "\n\nHope you enjoy the app!")
                     .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
