@@ -1,6 +1,8 @@
 package com.example.footwork;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -196,6 +198,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     })
                     .create().show();
+        }
+        else if (id == R.id.action_demo) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/7Z0YdNLd1CU"));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setPackage("com.google.android.youtube");
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
