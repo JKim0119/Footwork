@@ -7,7 +7,7 @@ Whenever I don't have a practice partner but want to train for tennis, I usually
 1. Practice some serves
 2. Do some shadow footwork drills
 
-One specific drill that I do for footwork is to basically play out a fake rally. One of the issues I had with this drill was that I always knew where I was going to go, so my footwork could easily compensate and make it easier (i.e going forehand to backhand to forehand to backhand, etc). I wanted to do my best to simulate a rally where I didn't know where the ball would be, [so I created this app!](https://play.google.com/store/apps/details?id=com.jyk.footwork)
+One specific drill that I do for footwork is to basically play out a fake rally. One of the issues I had with this drill was that I always knew where I was going to go, so my footwork could easily compensate and make it easier (i.e going forehand to backhand to forehand to backhand, etc). I wanted to do my best to simulate a rally where I didn't know where the ball would be, [so I created this app!](https://play.google.com/store/apps/details?id=jyk.footwork)
 
 [Here's a short video of me doing a demo of the app as well!](https://www.youtube.com/watch?v=7Z0YdNLd1CU)
 
